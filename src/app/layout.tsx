@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/shared/api/providers";
+import { WebVitalsReporter } from "@/shared/lib/web-vitals";
 import { Header } from "@/widgets/header";
 import { MobileTabBar } from "@/widgets/mobile-tab-bar";
 import { Footer } from "@/widgets/footer";
@@ -46,6 +47,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Providers>
+          <WebVitalsReporter />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

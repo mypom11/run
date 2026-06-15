@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { fetchRaces } from "@/entities/race";
 import { RaceCard } from "@/entities/race/ui/RaceCard";
 import { GlassCard } from "@/shared/ui";
+import { RaceStatsCard } from "@/widgets/race-stats";
 import { headers } from "next/headers";
 
 /**
@@ -19,7 +20,7 @@ export async function FeaturedRaces() {
   const end = new Date(now);
   end.setMonth(end.getMonth() + 3);
 
-  let items: Awaited<ReturnType<typeof fetchRaces>>["items"] = [];
+  let allItems: Awaited<ReturnType<typeof fetchRaces>>["items"] = [];
   try {
     const res = await fetchRaces(
       {
@@ -28,10 +29,11 @@ export async function FeaturedRaces() {
       },
       baseUrl,
     );
-    items = res.items.slice(0, 6);
+    allItems = res.items;
   } catch {
-    items = [];
+    allItems = [];
   }
+  const items = allItems.slice(0, 6);
 
   return (
     <section className="py-12">
@@ -61,6 +63,9 @@ export async function FeaturedRaces() {
           ))}
         </div>
       )}
+      <div className="mt-6">
+        <RaceStatsCard races={allItems} />
+      </div>
     </section>
   );
 }

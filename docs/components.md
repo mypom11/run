@@ -56,7 +56,7 @@ src/shared/ui/
   ```
 - **asChild 패턴**: 합성이 필요한 트리거는 Radix `Slot` (shadcn 기본 패턴).
 - **Variant**: `class-variance-authority`로 스타일 변형 관리 (shadcn 기본).
-- **Form**: `react-hook-form` + `zod` + shadcn `Form` 컴포넌트. 컨트롤 컴포넌트 직접 작성 금지.
+- **Form**: `react-hook-form` + `yup` (회사 표준). `useForm({ resolver: yupResolver(schema) })`. 에러 메시지는 `aria-describedby`로 입력에 연결.
 
 ## 반복 제거
 - 같은 마크업이 3번 이상 나타나면 컴포넌트로.

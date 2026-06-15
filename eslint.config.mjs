@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Cypress 디렉터리는 별도 tsconfig/규칙을 사용 — 메인 린트에서 제외
+    "cypress/**",
   ]),
 ]);
 

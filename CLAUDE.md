@@ -10,11 +10,15 @@
 - Next.js 16.2 (App Router, Cache Components 모델 사용 예정)
 - React 19 (Server Components 기본)
 - TypeScript 5
-- Tailwind CSS v4
-- shadcn/ui (컴포넌트는 프로젝트에 복사해 소유)
-- TanStack Query v5 (서버 상태)
+- Tailwind CSS v4 (현재) — 회사 표준은 Styled Components (docs/styling.md 참고)
+- shadcn/ui 패턴 (컴포넌트는 프로젝트에 복사해 소유)
+- TanStack Query v5 (서버 상태) + TanStack Virtual (대량 리스트)
 - Zustand (클라이언트 UI 상태)
+- React Hook Form + Yup (폼/검증, 회사 표준)
+- Chart.js (시각화)
 - 아키텍처: Feature-Sliced Design (FSD)
+- 테스트: Cypress (E2E 스모크), CI: GitHub Actions
+- 인프라 가정: AWS Fargate + CloudFront + S3 (docs/deployment.md)
 
 ## 폴더 구조 (FSD)
 ```
@@ -65,13 +69,21 @@ src/
 - `docs/rendering.md` — SSG/ISR/SSR/CSR 선택 기준 (Cache Components)
 - `docs/state.md` — React Query / Zustand 경계
 - `docs/components.md` — shadcn/ui 사용법
+- `docs/styling.md` — Tailwind ↔ Styled Components
 - `docs/performance.md` — 고트래픽 체크리스트
+- `docs/spike-traffic.md` — 스파이크 이벤트 대응
+- `docs/testing.md` — Cypress 운영
+- `docs/deployment.md` — AWS 토폴로지
+- `docs/analystic/` — 리뉴얼 대상(runable.me) 분석 보고서
 
 ## 명령어
 - `npm run dev` — 개발 서버
 - `npm run build` — 프로덕션 빌드 (라우트 정적/동적 결과 검증)
 - `npm run start` — 프로덕션 모드 실행
 - `npm run lint` — ESLint
+- `npm run typecheck` — `tsc --noEmit`
+- `npm run test:e2e` — Cypress 헤드리스
+- `npm run test:e2e:open` — Cypress GUI
 
 ## 미정 / 결정 대기
 - React Query, Zustand, shadcn/ui 설치는 아직 안 했다. 첫 컴포넌트 작업 시 같이 도입.

@@ -40,7 +40,7 @@
 
 ## React
 - [ ] `useMemo`/`useCallback`은 측정 후에만. 기본은 사용하지 않는다.
-- [ ] 큰 리스트는 가상화(`@tanstack/react-virtual`).
+- [ ] 큰 리스트는 가상화(`@tanstack/react-virtual`). 커뮤니티 피드는 40개 이상에서 자동 적용 (`features/community-feed/ui/CommunityFeed.tsx`).
 - [ ] 클라이언트 상태가 깊은 트리를 리렌더링하면 zustand selector(`(s) => s.x`)로 구독 범위 축소.
 - [ ] `key`는 안정적 id 사용. 인덱스 key는 정적 리스트에만.
 
@@ -51,9 +51,9 @@
 - [ ] `error.tsx`로 라우트 격리 — 한 섹션 실패가 전체를 무너뜨리지 않게.
 
 ## 모니터링
-- [ ] Web Vitals 수집 (`@vercel/analytics` 또는 자체).
-- [ ] LCP, INP, CLS는 PR 단위로 비교.
-- [ ] 캐시 적중률 (배포 플랫폼 메트릭) 주기 점검.
+- [ ] Web Vitals 수집 — `WebVitalsReporter` (`src/shared/lib/web-vitals.tsx`) → `/api/vitals` sendBeacon. 운영에서 외부 메트릭으로 forwarding.
+- [ ] LCP, INP, CLS는 PR 단위로 비교 (사람 운영자가 대시보드에서).
+- [ ] 캐시 적중률 (CloudFront 메트릭) 주기 점검.
 
 ## 결정 시 던지는 질문
 1. 이 데이터, 사용자마다 다른가? 아니면 정적으로 만들 수 있나?

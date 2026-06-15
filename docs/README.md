@@ -16,7 +16,11 @@
 - [rendering.md](./rendering.md) — SSG / ISR / SSR / CSR 선택 기준 (Cache Components 포함)
 - [state.md](./state.md) — React Query와 Zustand의 경계
 - [components.md](./components.md) — shadcn/ui 기반 컴포넌트 규칙
+- [styling.md](./styling.md) — Tailwind v4 ↔ Styled Components 마이그레이션 경로
 - [performance.md](./performance.md) — 고트래픽 대응, 빌드 분할, 호출 중복 제거
+- [spike-traffic.md](./spike-traffic.md) — 스파이크 트래픽(대회 접수 오픈) 대응
+- [testing.md](./testing.md) — Cypress E2E 운영 방침
+- [deployment.md](./deployment.md) — AWS Fargate + CloudFront + S3 배포 토폴로지
 
 ## 핵심 원칙 (다른 모든 문서가 이를 보조한다)
 1. **정적 우선.** 가능한 모든 페이지는 정적 또는 ISR. 동적은 명시적 결정이 필요하다.

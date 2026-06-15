@@ -1,4 +1,5 @@
 import { RaceCalendar } from "@/features/race-calendar";
+import { RaceSearchBar } from "@/features/race-search";
 
 export function RaceView() {
   return (
@@ -15,7 +16,10 @@ export function RaceView() {
           탐색하세요.
         </p>
       </header>
-      <RaceCalendar />
+      <div className="space-y-5">
+        <RaceSearchBar />
+        <RaceCalendar />
+      </div>
     </div>
   );
 }

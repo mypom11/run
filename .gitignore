@@ -30,6 +30,11 @@
 # oh-my-claudecode local state
 .omc/
 
+# Cypress artifacts
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

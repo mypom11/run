@@ -12,6 +12,7 @@ import {
   RACE_EVENT_LABEL,
   type RaceEvent,
 } from "@/entities/race";
+import { useRaceSearchStore } from "@/features/race-search";
 import { RaceChip } from "@/entities/race/ui/RaceChip";
 import { RaceCard } from "@/entities/race/ui/RaceCard";
 import { Button, GlassCard, Segmented, Skeleton } from "@/shared/ui";
@@ -39,9 +40,18 @@ export function RaceCalendar() {
     placeholderData: (prev) => prev,
   });
 
+  const keyword = useRaceSearchStore((s) => s.keyword);
+
+  const filteredItems = useMemo(() => {
+    const items = data?.items ?? [];
+    if (!keyword.trim()) return items;
+    const k = keyword.trim().toLowerCase();
+    return items.filter((r) => r.title.toLowerCase().includes(k));
+  }, [data?.items, keyword]);
+
   const cells = useMemo(
-    () => buildCalendarGrid(anchor, data?.items ?? []),
-    [anchor, data?.items],
+    () => buildCalendarGrid(anchor, filteredItems),
+    [anchor, filteredItems],
   );
 
   const toggleEvent = (e: RaceEvent) =>
@@ -142,7 +152,7 @@ export function RaceCalendar() {
       ) : view === "calendar" ? (
         <CalendarGrid cells={cells} isLoading={isLoading && !data} />
       ) : (
-        <RaceList items={data?.items ?? []} isLoading={isLoading && !data} />
+        <RaceList items={filteredItems} isLoading={isLoading && !data} />
       )}
     </section>
   );
