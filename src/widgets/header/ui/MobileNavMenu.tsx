@@ -4,10 +4,11 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { ArrowRight, X, LogIn, Search } from "lucide-react";
+import { ArrowRight, X, Search } from "lucide-react";
 import { Button } from "@/shared/ui";
 import { NAV_ITEMS } from "@/shared/config/runable";
 import { cn } from "@/shared/lib/utils";
+import { QueueModeRow, StartButton } from "@/features/queue-mode";
 
 interface MobileNavMenuProps {
   open: boolean;
@@ -93,16 +94,16 @@ export function MobileNavMenu({ open, onOpenChange }: MobileNavMenuProps) {
             </ul>
           </nav>
 
-          {/* secondary actions */}
-          <div className="mt-5 grid grid-cols-2 gap-2 border-t border-white/[0.08] pt-5">
-            <Button variant="glass" className="w-full" aria-label="검색">
-              <Search className="size-4" />
-              검색
-            </Button>
-            <Button variant="primary" className="w-full" aria-label="로그인">
-              <LogIn className="size-4" />
-              시작하기
-            </Button>
+          {/* queue mode + CTA */}
+          <div className="mt-5 space-y-2 border-t border-white/[0.08] pt-5">
+            <QueueModeRow />
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="glass" className="w-full" aria-label="검색">
+                <Search className="size-4" />
+                검색
+              </Button>
+              <StartButton variant="primary" size="md" fullWidth />
+            </div>
           </div>
 
           <p className="mt-4 px-1 text-[10px] text-[var(--fg-subtle)]">

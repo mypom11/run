@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, User } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui";
 import { NAV_ITEMS } from "@/shared/config/runable";
 import { cn } from "@/shared/lib/utils";
+import { QueueModeToggle, StartButton } from "@/features/queue-mode";
 import { MobileNavMenu } from "./MobileNavMenu";
 
 export function Header() {
@@ -70,13 +71,9 @@ export function Header() {
             })}
           </ul>
 
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" aria-label="검색" className="hidden sm:inline-flex">
-              <User className="size-4" />
-            </Button>
-            <Button variant="primary" size="sm" className="hidden sm:inline-flex">
-              시작하기
-            </Button>
+          <div className="flex items-center gap-2">
+            <QueueModeToggle className="hidden md:inline-flex" />
+            <StartButton className="hidden sm:inline-flex" />
             <Button
               variant="ghost"
               size="icon"

@@ -4,6 +4,7 @@ export { GlassCard } from "./glass-card";
 export { Skeleton } from "./skeleton";
 export { Segmented } from "./segmented";
 export type { SegmentedOption } from "./segmented";
+export { Switch } from "./switch";
 export {
   Dialog,
   DialogTrigger,
