@@ -24,6 +24,12 @@
 .DS_Store
 *.pem
 
+# IDE
+.idea/
+
+# oh-my-claudecode local state
+.omc/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
