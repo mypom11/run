@@ -7,10 +7,12 @@ import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui";
 import { NAV_ITEMS } from "@/shared/config/runable";
 import { cn } from "@/shared/lib/utils";
+import { MobileNavMenu } from "./MobileNavMenu";
 
 export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -75,12 +77,21 @@ export function Header() {
             <Button variant="primary" size="sm" className="hidden sm:inline-flex">
               시작하기
             </Button>
-            <Button variant="ghost" size="icon" className="md:hidden" aria-label="메뉴">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              aria-label="메뉴 열기"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav-menu"
+              onClick={() => setMenuOpen(true)}
+            >
               <Menu className="size-5" />
             </Button>
           </div>
         </nav>
       </div>
+      <MobileNavMenu open={menuOpen} onOpenChange={setMenuOpen} />
     </header>
   );
 }

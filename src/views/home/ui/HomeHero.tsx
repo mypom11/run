@@ -5,8 +5,8 @@ import { Button, GlassCard } from "@/shared/ui";
 
 export function HomeHero() {
   return (
-    <section className="relative -mx-5 overflow-hidden">
-      {/* background image */}
+    <section className="relative overflow-hidden">
+      {/* background image — HomeView가 패딩 없는 컨테이너라 viewport 풀블리드 */}
       <div className="relative h-[78vh] min-h-[560px] w-full">
         <Image
           src="https://picsum.photos/seed/runable-hero-2/2000/1200"
