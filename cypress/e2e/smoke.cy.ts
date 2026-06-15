@@ -11,11 +11,19 @@ describe("핵심 페이지 스모크", () => {
     cy.contains("테스트 마라톤").should("exist");
   });
 
-  it("커뮤니티 페이지에 카테고리와 글이 보인다", () => {
-    cy.visit("/community");
-    cy.contains("러너 커뮤니티").should("be.visible");
-    cy.contains("대회 후기").should("exist");
-    cy.contains("첫 마라톤 후기").should("exist");
+  it("매거진 페이지가 렌더링된다", () => {
+    cy.visit("/magazine");
+    cy.contains("러너 매거진").should("be.visible");
+  });
+
+  it("런트립 페이지가 렌더링된다", () => {
+    cy.visit("/runtrip");
+    cy.contains("런트립").should("be.visible");
+  });
+
+  it("페이스 계산기가 동작한다", () => {
+    cy.visit("/pace-calculator");
+    cy.contains("페이스 계산기").should("be.visible");
   });
 
   it("404 페이지가 동작한다", () => {

@@ -85,7 +85,19 @@ src/
 - `npm run test:e2e` — Cypress 헤드리스
 - `npm run test:e2e:open` — Cypress GUI
 
+## 현재 라우트
+- `/` 홈 (정적 + Suspense로 추천 대회 동적 섹션 합성)
+- `/race` 대회 캘린더 (BFF `/api/races` → runable.me 일정 정규화 + ISR)
+- `/magazine` 매거진 (정적 콘텐츠)
+- `/runtrip` 런트립 (정적 콘텐츠)
+- `/pace-calculator` 페이스/속도 계산기 (CSR, RHF+Yup)
+- `/api/races`, `/api/vitals`, `/robots.txt`, `/sitemap.xml`
+
+## 데이터 소스
+- 외부 의존: **대회 일정만** runable.me public API 프록시.
+- 매거진/런트립은 정적 데이터(`src/entities/article`, `src/entities/runtrip`).
+- 미래 확장: 동일 패턴으로 BFF만 추가하면 어떤 콘텐츠든 끼울 수 있다.
+
 ## 미정 / 결정 대기
-- React Query, Zustand, shadcn/ui 설치는 아직 안 했다. 첫 컴포넌트 작업 시 같이 도입.
 - 디자인 토큰/팔레트는 디자인 픽스 후 `globals.css`의 Tailwind v4 변수로 반영.
-- 리뉴얼 대상 홈페이지의 라우트 맵은 별도로 정의되면 `docs/routes.md`로 추가.
+- 매거진/런트립 상세 라우트(`/magazine/[slug]`, `/runtrip/[slug]`)는 콘텐츠 확정 후 추가.

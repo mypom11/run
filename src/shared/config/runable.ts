@@ -8,6 +8,7 @@ export const RUNABLE_STORAGE_BASE = "https://storage.runable.me";
 export const NAV_ITEMS = [
   { href: "/", label: "홈" },
   { href: "/race", label: "대회일정" },
-  { href: "/community", label: "커뮤니티" },
   { href: "/magazine", label: "매거진" },
+  { href: "/runtrip", label: "런트립" },
+  { href: "/pace-calculator", label: "페이스" },
 ] as const;

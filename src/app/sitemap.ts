@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const STATIC_ROUTES = ["", "/race", "/community", "/magazine"];
+const STATIC_ROUTES = ["", "/race", "/magazine", "/runtrip", "/pace-calculator"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base =

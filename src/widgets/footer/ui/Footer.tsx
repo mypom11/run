@@ -13,8 +13,8 @@ export function Footer() {
           <div className="text-sm text-[var(--fg-muted)] space-y-1.5">
             <div className="text-[var(--fg)] font-medium mb-2">서비스</div>
             <div>대회일정</div>
-            <div>커뮤니티</div>
             <div>매거진</div>
+            <div>런트립</div>
             <div>페이스 계산기</div>
           </div>
           <div className="text-sm text-[var(--fg-muted)] space-y-1.5">

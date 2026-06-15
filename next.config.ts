@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "storage.runable.me" },
       { protocol: "https", hostname: "runable.me" },
+      // 데모/플레이스홀더 이미지 — 실제 운영 시 자체 CDN으로 교체
+      { protocol: "https", hostname: "picsum.photos" },
+      { protocol: "https", hostname: "images.unsplash.com" },
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60,

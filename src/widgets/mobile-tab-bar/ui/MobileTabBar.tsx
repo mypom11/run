@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, CalendarDays, MessagesSquare, User } from "lucide-react";
+import { Home, CalendarDays, BookOpen, Plane, Timer } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
 const TABS = [
   { href: "/", label: "홈", icon: Home },
   { href: "/race", label: "대회", icon: CalendarDays },
-  { href: "/community", label: "커뮤니티", icon: MessagesSquare },
-  { href: "/my", label: "마이", icon: User },
+  { href: "/magazine", label: "매거진", icon: BookOpen },
+  { href: "/runtrip", label: "런트립", icon: Plane },
+  { href: "/pace-calculator", label: "페이스", icon: Timer },
 ] as const;
 
 export function MobileTabBar() {
