@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
   ChevronLeft,
@@ -17,20 +18,28 @@ import {
   raceKeys,
   RACE_EVENTS,
   RACE_EVENT_LABEL,
+  type NormalizedRace,
   type RaceEvent,
 } from "@/entities/race";
-import { useRaceSearchStore } from "@/features/race-search";
 import { RaceChip } from "@/entities/race/ui/RaceChip";
 import { RaceCard } from "@/entities/race/ui/RaceCard";
 import { Button, GlassCard, Segmented, Skeleton } from "@/shared/ui";
 import { cn } from "@/shared/lib/utils";
 import { buildCalendarGrid, monthRangeIso } from "../model/calendarGrid";
+import { DayRacesDialog } from "./DayRacesDialog";
 
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 type ViewMode = "calendar" | "list" | "map";
 
-// Leaflet은 SSR 불가 → 클라이언트에서만 로드
+// 지역 키 → 위치 문자열에 포함되어야 할 키워드
+const REGION_KEYWORD: Record<string, string[]> = {
+  seoul: ["서울"],
+  gyeonggi: ["경기", "수원", "성남", "안양", "고양", "용인", "화성"],
+  busan: ["부산"],
+  jeju: ["제주", "서귀포"],
+};
+
 const RaceMap = dynamic(
   () => import("@/features/race-map").then((m) => m.RaceMap),
   {
@@ -43,12 +52,14 @@ export function RaceCalendar() {
   const [anchor, setAnchor] = useState<Date>(() => new Date());
   const [view, setView] = useState<ViewMode>("calendar");
   const [events, setEvents] = useState<RaceEvent[]>([]);
+  const [openDay, setOpenDay] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const keyword = (searchParams.get("q") ?? "").trim();
+  const region = searchParams.get("region") ?? "";
 
   const range = useMemo(() => monthRangeIso(anchor), [anchor]);
-  const filters = useMemo(
-    () => ({ ...range, events }),
-    [range, events],
-  );
+  const filters = useMemo(() => ({ ...range, events }), [range, events]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: raceKeys.list(filters),
@@ -56,14 +67,10 @@ export function RaceCalendar() {
     placeholderData: (prev) => prev,
   });
 
-  const keyword = useRaceSearchStore((s) => s.keyword);
-
   const filteredItems = useMemo(() => {
     const items = data?.items ?? [];
-    if (!keyword.trim()) return items;
-    const k = keyword.trim().toLowerCase();
-    return items.filter((r) => r.title.toLowerCase().includes(k));
-  }, [data?.items, keyword]);
+    return items.filter((r) => matchesFilters(r, keyword, region));
+  }, [data?.items, keyword, region]);
 
   const cells = useMemo(
     () => buildCalendarGrid(anchor, filteredItems),
@@ -71,7 +78,14 @@ export function RaceCalendar() {
   );
 
   const toggleEvent = (e: RaceEvent) =>
-    setEvents((cur) => (cur.includes(e) ? cur.filter((x) => x !== e) : [...cur, e]));
+    setEvents((cur) =>
+      cur.includes(e) ? cur.filter((x) => x !== e) : [...cur, e],
+    );
+
+  const racesForOpenDay: NormalizedRace[] = useMemo(() => {
+    if (!openDay) return [];
+    return cells.find((c) => c.iso === openDay)?.races ?? [];
+  }, [openDay, cells]);
 
   return (
     <section className="space-y-5">
@@ -169,13 +183,40 @@ export function RaceCalendar() {
         </div>
       </GlassCard>
 
+      {/* 결과 카운트 */}
+      {(keyword || region) && !isLoading && (
+        <div className="px-1 text-xs text-[var(--fg-muted)]">
+          검색 결과{" "}
+          <span className="font-semibold text-[var(--accent-strong)]">
+            {filteredItems.length}
+          </span>
+          개
+          {keyword && (
+            <>
+              {" · 키워드 "}
+              <span className="text-[var(--fg)]">“{keyword}”</span>
+            </>
+          )}
+          {region && (
+            <>
+              {" · 지역 "}
+              <span className="text-[var(--fg)]">{region}</span>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Content */}
       {isError ? (
         <GlassCard className="p-8 text-center text-[var(--fg-muted)]">
           대회 일정을 불러오지 못했습니다.
         </GlassCard>
       ) : view === "calendar" ? (
-        <CalendarGrid cells={cells} isLoading={isLoading && !data} />
+        <CalendarGrid
+          cells={cells}
+          isLoading={isLoading && !data}
+          onSelectDay={setOpenDay}
+        />
       ) : view === "map" ? (
         isLoading && !data ? (
           <Skeleton className="h-[560px] w-full" />
@@ -185,16 +226,49 @@ export function RaceCalendar() {
       ) : (
         <RaceList items={filteredItems} isLoading={isLoading && !data} />
       )}
+
+      <DayRacesDialog
+        open={!!openDay}
+        onOpenChange={(o) => !o && setOpenDay(null)}
+        iso={openDay}
+        races={racesForOpenDay}
+      />
     </section>
   );
+}
+
+function matchesFilters(
+  race: NormalizedRace,
+  keyword: string,
+  region: string,
+): boolean {
+  if (keyword) {
+    const k = keyword.toLowerCase();
+    const hay =
+      `${race.title} ${race.location ?? ""} ${race.events.join(" ")}`.toLowerCase();
+    if (!hay.includes(k)) return false;
+  }
+  if (region) {
+    const loc = race.location ?? "";
+    if (region === "etc") {
+      const known = Object.values(REGION_KEYWORD).flat();
+      if (known.some((kw) => loc.includes(kw))) return false;
+    } else {
+      const kws = REGION_KEYWORD[region];
+      if (kws && !kws.some((kw) => loc.includes(kw))) return false;
+    }
+  }
+  return true;
 }
 
 function CalendarGrid({
   cells,
   isLoading,
+  onSelectDay,
 }: {
   cells: ReturnType<typeof buildCalendarGrid>;
   isLoading: boolean;
+  onSelectDay: (iso: string) => void;
 }) {
   return (
     <GlassCard className="overflow-hidden p-3 sm:p-4">
@@ -217,43 +291,66 @@ function CalendarGrid({
           ? Array.from({ length: 35 }).map((_, i) => (
               <Skeleton key={i} className="aspect-[3/4] sm:aspect-[5/6]" />
             ))
-          : cells.map((cell) => (
-              <div
-                key={cell.iso}
-                className={cn(
-                  "relative flex aspect-[3/4] flex-col gap-1 overflow-hidden rounded-[var(--radius-md)] border border-white/[0.06] p-1 transition-colors sm:aspect-[5/6] sm:p-1.5",
-                  cell.inMonth
-                    ? "bg-white/[0.02] hover:bg-white/[0.05]"
-                    : "bg-transparent text-[var(--fg-subtle)]",
-                  cell.isToday &&
-                    "ring-1 ring-[var(--accent)] bg-[var(--accent-soft)]",
-                )}
-              >
+          : cells.map((cell) => {
+              const hasRaces = cell.races.length > 0;
+              return (
                 <div
+                  key={cell.iso}
                   className={cn(
-                    "flex items-center justify-between text-[11px] sm:text-xs",
-                    cell.isToday && "font-semibold text-[var(--accent-strong)]",
+                    "relative flex aspect-[3/4] flex-col gap-1 overflow-hidden rounded-[var(--radius-md)] border border-white/[0.06] p-1 transition-colors sm:aspect-[5/6] sm:p-1.5",
+                    cell.inMonth
+                      ? "bg-white/[0.02]"
+                      : "bg-transparent text-[var(--fg-subtle)]",
+                    cell.isToday &&
+                      "ring-1 ring-[var(--accent)] bg-[var(--accent-soft)]",
+                    hasRaces && "cursor-pointer hover:bg-white/[0.06]",
                   )}
+                  onClick={hasRaces ? () => onSelectDay(cell.iso) : undefined}
+                  role={hasRaces ? "button" : undefined}
+                  tabIndex={hasRaces ? 0 : -1}
+                  onKeyDown={(e) => {
+                    if (hasRaces && (e.key === "Enter" || e.key === " ")) {
+                      e.preventDefault();
+                      onSelectDay(cell.iso);
+                    }
+                  }}
+                  aria-label={
+                    hasRaces
+                      ? `${cell.iso} 대회 ${cell.races.length}개 보기`
+                      : undefined
+                  }
                 >
-                  <span>{cell.date.getDate()}</span>
-                  {cell.races.length > 0 && (
-                    <span className="rounded-full bg-[var(--accent)] px-1.5 text-[9px] font-bold text-white">
-                      {cell.races.length}
-                    </span>
-                  )}
+                  <div
+                    className={cn(
+                      "flex items-center justify-between text-[11px] sm:text-xs",
+                      cell.isToday &&
+                        "font-semibold text-[var(--accent-strong)]",
+                    )}
+                  >
+                    <span>{cell.date.getDate()}</span>
+                    {hasRaces && (
+                      <span className="rounded-full bg-[var(--accent)] px-1.5 text-[9px] font-bold text-white">
+                        {cell.races.length}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-1 flex-col gap-0.5 overflow-hidden">
+                    {cell.races.slice(0, 2).map((race) => (
+                      <RaceChip
+                        key={race.id}
+                        race={race}
+                        onClick={() => onSelectDay(cell.iso)}
+                      />
+                    ))}
+                    {cell.races.length > 2 && (
+                      <span className="px-1 text-[9px] text-[var(--fg-muted)]">
+                        +{cell.races.length - 2}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-1 flex-col gap-0.5 overflow-hidden">
-                  {cell.races.slice(0, 2).map((race) => (
-                    <RaceChip key={race.id} race={race} />
-                  ))}
-                  {cell.races.length > 2 && (
-                    <span className="px-1 text-[9px] text-[var(--fg-muted)]">
-                      +{cell.races.length - 2}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
       </div>
     </GlassCard>
   );
@@ -263,7 +360,7 @@ function RaceList({
   items,
   isLoading,
 }: {
-  items: ReturnType<typeof buildCalendarGrid>[number]["races"] | [];
+  items: NormalizedRace[];
   isLoading: boolean;
 }) {
   if (isLoading) {
@@ -278,7 +375,7 @@ function RaceList({
   if (items.length === 0) {
     return (
       <GlassCard className="p-10 text-center text-[var(--fg-muted)]">
-        이 달에는 대회가 없습니다.
+        조건에 맞는 대회가 없습니다.
       </GlassCard>
     );
   }
