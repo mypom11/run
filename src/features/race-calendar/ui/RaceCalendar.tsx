@@ -1,8 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, CalendarDays, ListChecks } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  CalendarDays,
+  ListChecks,
+  MapPin,
+} from "lucide-react";
 import { addMonths, format } from "date-fns";
 import { ko } from "date-fns/locale";
 import {
@@ -21,7 +28,16 @@ import { buildCalendarGrid, monthRangeIso } from "../model/calendarGrid";
 
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
-type ViewMode = "calendar" | "list";
+type ViewMode = "calendar" | "list" | "map";
+
+// Leaflet은 SSR 불가 → 클라이언트에서만 로드
+const RaceMap = dynamic(
+  () => import("@/features/race-map").then((m) => m.RaceMap),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-[560px] w-full" />,
+  },
+);
 
 export function RaceCalendar() {
   const [anchor, setAnchor] = useState<Date>(() => new Date());
@@ -119,6 +135,15 @@ export function RaceCalendar() {
                   </span>
                 ),
               },
+              {
+                value: "map",
+                label: (
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="size-4" />
+                    지도
+                  </span>
+                ),
+              },
             ]}
           />
           <div className="glass flex flex-wrap items-center gap-1 rounded-[var(--radius-pill)] p-1">
@@ -151,6 +176,12 @@ export function RaceCalendar() {
         </GlassCard>
       ) : view === "calendar" ? (
         <CalendarGrid cells={cells} isLoading={isLoading && !data} />
+      ) : view === "map" ? (
+        isLoading && !data ? (
+          <Skeleton className="h-[560px] w-full" />
+        ) : (
+          <RaceMap races={filteredItems} />
+        )
       ) : (
         <RaceList items={filteredItems} isLoading={isLoading && !data} />
       )}
