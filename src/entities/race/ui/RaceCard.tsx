@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Calendar, MapPin } from "lucide-react";
-import { Badge, GlassCard } from "@/shared/ui";
+import { Badge, GlassCard, Pressable } from "@/shared/ui";
 import { formatDateShort } from "@/shared/lib/utils";
 import type { NormalizedRace } from "../model/types";
 
@@ -10,7 +10,8 @@ interface RaceCardProps {
 
 export function RaceCard({ race }: RaceCardProps) {
   const inner = (
-    <GlassCard className="group relative h-full p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20">
+    <Pressable className="h-full">
+    <GlassCard className="group relative h-full p-5 transition-colors duration-300 hover:border-white/20">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <h3 className="font-display text-lg leading-tight text-[var(--fg)] truncate">
@@ -44,6 +45,7 @@ export function RaceCard({ race }: RaceCardProps) {
         )}
       </div>
     </GlassCard>
+    </Pressable>
   );
 
   return race.compUrl ? (

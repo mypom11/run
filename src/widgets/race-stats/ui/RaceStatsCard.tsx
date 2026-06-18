@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import { GlassCard, Skeleton } from "@/shared/ui";
+import { GlassCard, Skeleton, CountUp } from "@/shared/ui";
 import type { NormalizedRace } from "@/entities/race";
 
 // Chart.js는 클라이언트 전용. dynamic import + ssr:false로 번들 분리.
@@ -50,7 +50,7 @@ export function RaceStatsCard({ races }: RaceStatsCardProps) {
           </h3>
         </div>
         <div className="text-right">
-          <div className="font-display text-2xl tracking-tight">{total}</div>
+          <CountUp value={total} className="font-display text-2xl tracking-tight" />
           <div className="text-[10px] uppercase tracking-widest text-[var(--fg-subtle)]">
             races
           </div>

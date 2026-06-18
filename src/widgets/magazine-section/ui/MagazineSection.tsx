@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard, getRecentArticles } from "@/entities/article";
+import { Reveal } from "@/shared/ui";
 
 export function MagazineSection() {
   const items = getRecentArticles(4);
@@ -25,10 +26,14 @@ export function MagazineSection() {
         </Link>
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
-        <ArticleCard article={hero} variant="large" />
+        <Reveal>
+          <ArticleCard article={hero} variant="large" />
+        </Reveal>
         <div className="grid gap-4">
-          {rest.map((a) => (
-            <ArticleCard key={a.id} article={a} />
+          {rest.map((a, i) => (
+            <Reveal key={a.id} index={i + 1}>
+              <ArticleCard article={a} />
+            </Reveal>
           ))}
         </div>
       </div>

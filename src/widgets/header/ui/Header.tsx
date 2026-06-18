@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui";
@@ -12,6 +13,7 @@ import { MobileNavMenu } from "./MobileNavMenu";
 
 export function Header() {
   const pathname = usePathname();
+  const reduce = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -23,9 +25,12 @@ export function Header() {
   }, []);
 
   return (
-    <header
+    <motion.header
+      initial={reduce ? false : { y: -28, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 260, damping: 28 }}
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300",
+        "sticky top-0 z-50 transition-[padding] duration-300",
         scrolled ? "py-2" : "py-3",
       )}
     >
@@ -58,12 +63,19 @@ export function Header() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "rounded-[var(--radius-pill)] px-4 py-2 text-sm font-medium transition-colors",
+                      "relative block rounded-[var(--radius-pill)] px-4 py-2 text-sm font-medium transition-colors",
                       active
-                        ? "bg-white/[0.1] text-[var(--fg)]"
-                        : "text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-white/[0.06]",
+                        ? "text-[var(--fg)]"
+                        : "text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-white/[0.06] rounded-[var(--radius-pill)]",
                     )}
                   >
+                    {active && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        transition={{ type: "spring", stiffness: 360, damping: 30 }}
+                        className="absolute inset-0 -z-10 rounded-[var(--radius-pill)] bg-white/[0.1]"
+                      />
+                    )}
                     {item.label}
                   </Link>
                 </li>
@@ -89,7 +101,7 @@ export function Header() {
         </nav>
       </div>
       <MobileNavMenu open={menuOpen} onOpenChange={setMenuOpen} />
-    </header>
+    </motion.header>
   );
 }
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { fetchRaces } from "@/entities/race";
 import { RaceCard } from "@/entities/race/ui/RaceCard";
-import { GlassCard } from "@/shared/ui";
+import { GlassCard, Reveal } from "@/shared/ui";
 import { RaceStatsCard } from "@/widgets/race-stats";
 import { headers } from "next/headers";
 
@@ -58,8 +58,10 @@ export async function FeaturedRaces() {
         </GlassCard>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((race) => (
-            <RaceCard key={race.id} race={race} />
+          {items.map((race, i) => (
+            <Reveal key={race.id} index={i} className="h-full">
+              <RaceCard race={race} />
+            </Reveal>
           ))}
         </div>
       )}

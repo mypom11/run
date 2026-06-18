@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Timer, Sparkles, BookOpen, Plane } from "lucide-react";
-import { GlassCard } from "@/shared/ui";
+import { GlassCard, Reveal, Pressable } from "@/shared/ui";
 
 const ITEMS = [
   {
@@ -33,16 +33,22 @@ export function ToolsBand() {
   return (
     <section className="py-12">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {ITEMS.map(({ href, title, desc, icon: Icon }) => (
-          <Link key={href} href={href} className="group block">
-            <GlassCard className="h-full p-5 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:bg-white/[0.08]">
-              <div className="flex size-11 items-center justify-center rounded-2xl bg-[var(--accent-soft)] text-[var(--accent-strong)]">
-                <Icon className="size-5" />
-              </div>
-              <h3 className="mt-4 font-display text-lg tracking-tight">{title}</h3>
-              <p className="mt-1 text-xs text-[var(--fg-muted)]">{desc}</p>
-            </GlassCard>
-          </Link>
+        {ITEMS.map(({ href, title, desc, icon: Icon }, i) => (
+          <Reveal key={href} index={i}>
+            <Link href={href} className="group block h-full">
+              <Pressable className="h-full">
+                <GlassCard className="h-full p-5 transition-colors duration-300 group-hover:bg-white/[0.08]">
+                  <div className="flex size-11 items-center justify-center rounded-2xl bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    <Icon className="size-5" />
+                  </div>
+                  <h3 className="mt-4 font-display text-lg tracking-tight">
+                    {title}
+                  </h3>
+                  <p className="mt-1 text-xs text-[var(--fg-muted)]">{desc}</p>
+                </GlassCard>
+              </Pressable>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>

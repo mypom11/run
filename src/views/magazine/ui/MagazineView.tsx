@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ARTICLES,
   ARTICLE_CATEGORY_LABEL,
@@ -54,11 +55,26 @@ export function MagazineView() {
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((a) => (
-          <ArticleCard key={a.id} article={a} />
-        ))}
-      </div>
+      <motion.div layout className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <AnimatePresence mode="popLayout">
+          {items.map((a, i) => (
+            <motion.div
+              key={a.id}
+              layout
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{
+                duration: 0.32,
+                ease: [0.22, 1, 0.36, 1],
+                delay: Math.min(i, 8) * 0.03,
+              }}
+            >
+              <ArticleCard article={a} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }

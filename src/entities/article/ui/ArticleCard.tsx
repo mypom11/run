@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Clock } from "lucide-react";
-import { GlassCard, Badge } from "@/shared/ui";
+import { GlassCard, Badge, Pressable } from "@/shared/ui";
 import { formatDateShort } from "@/shared/lib/utils";
 import { ARTICLE_CATEGORY_LABEL, type Article } from "../model/types";
 
@@ -17,8 +17,9 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
       href={`/magazine/${article.slug}`}
       className="group block focus-visible:outline-none"
     >
+      <Pressable className="h-full">
       <GlassCard
-        className="h-full overflow-hidden p-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-white/20"
+        className="h-full overflow-hidden p-0 transition-colors duration-300 group-hover:border-white/20"
       >
         <div
           className={
@@ -67,6 +68,7 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
           </div>
         </div>
       </GlassCard>
+      </Pressable>
     </Link>
   );
 }

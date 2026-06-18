@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { RUNTRIPS, RunTripCard } from "@/entities/runtrip";
+import { Reveal } from "@/shared/ui";
 
 export function RunTripSection() {
   const items = RUNTRIPS.slice(0, 3);
@@ -23,8 +24,10 @@ export function RunTripSection() {
         </Link>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((t) => (
-          <RunTripCard key={t.id} trip={t} />
+        {items.map((t, i) => (
+          <Reveal key={t.id} index={i} className="h-full">
+            <RunTripCard trip={t} />
+          </Reveal>
         ))}
       </div>
     </section>

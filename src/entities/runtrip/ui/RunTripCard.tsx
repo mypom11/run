@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, MapPin, Plane } from "lucide-react";
-import { Badge, GlassCard } from "@/shared/ui";
+import { Badge, GlassCard, Pressable } from "@/shared/ui";
 import { formatDateShort } from "@/shared/lib/utils";
 import { priceLabel } from "../model/trips";
 import type { RunTrip } from "../model/types";
@@ -16,7 +16,8 @@ export function RunTripCard({ trip }: RunTripCardProps) {
       href={`/runtrip/${trip.slug}`}
       className="group block focus-visible:outline-none"
     >
-      <GlassCard className="relative h-full overflow-hidden p-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-white/20">
+      <Pressable className="h-full">
+      <GlassCard className="relative h-full overflow-hidden p-0 transition-colors duration-300 group-hover:border-white/20">
         <div className="relative aspect-[4/3] w-full">
           <Image
             src={trip.cover}
@@ -75,6 +76,7 @@ export function RunTripCard({ trip }: RunTripCardProps) {
           </div>
         </div>
       </GlassCard>
+      </Pressable>
     </Link>
   );
 }

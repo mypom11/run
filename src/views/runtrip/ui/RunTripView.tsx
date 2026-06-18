@@ -1,4 +1,5 @@
 import { RUNTRIPS, RunTripCard } from "@/entities/runtrip";
+import { Reveal } from "@/shared/ui";
 
 export function RunTripView() {
   return (
@@ -16,8 +17,10 @@ export function RunTripView() {
       </header>
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {RUNTRIPS.map((t) => (
-          <RunTripCard key={t.id} trip={t} />
+        {RUNTRIPS.map((t, i) => (
+          <Reveal key={t.id} index={i} className="h-full">
+            <RunTripCard trip={t} />
+          </Reveal>
         ))}
       </div>
 

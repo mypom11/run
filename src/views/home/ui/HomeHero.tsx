@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { Button, GlassCard } from "@/shared/ui";
+import { Button, GlassCard, CountUp } from "@/shared/ui";
 
 export function HomeHero() {
   return (
@@ -64,22 +64,32 @@ export function HomeHero() {
       {/* metrics row, overlapping bottom */}
       <div className="mx-auto -mt-12 max-w-6xl px-5">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Metric label="등록 러너" value="120K+" />
-          <Metric label="등록 대회" value="650+" />
-          <Metric label="매거진" value="320+" />
-          <Metric label="런트립 도시" value="18" />
+          <Metric label="등록 러너" value={120} suffix="K+" />
+          <Metric label="등록 대회" value={650} suffix="+" />
+          <Metric label="매거진" value={320} suffix="+" />
+          <Metric label="런트립 도시" value={18} />
         </div>
       </div>
     </section>
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({
+  label,
+  value,
+  suffix = "",
+}: {
+  label: string;
+  value: number;
+  suffix?: string;
+}) {
   return (
     <GlassCard className="px-4 py-5 text-center" intensity="strong">
-      <div className="font-display text-2xl tracking-tight sm:text-3xl">
-        {value}
-      </div>
+      <CountUp
+        value={value}
+        suffix={suffix}
+        className="font-display block text-2xl tracking-tight sm:text-3xl"
+      />
       <div className="mt-1 text-[10px] uppercase tracking-widest text-[var(--fg-subtle)] sm:text-xs">
         {label}
       </div>
