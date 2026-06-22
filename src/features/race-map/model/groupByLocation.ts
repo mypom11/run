@@ -1,9 +1,5 @@
 import type { NormalizedRace } from "@/entities/race";
-import {
-  geocodeLocation,
-  locationKey,
-  type LatLng,
-} from "@/shared/lib/locations";
+import { resolveLocation, type LatLng } from "@/shared/lib/locations";
 
 export interface RaceLocationGroup {
   key: string;            // e.g. "서울"
@@ -21,17 +17,18 @@ export function groupRacesByLocation(races: NormalizedRace[]): GroupResult {
   const unresolved: NormalizedRace[] = [];
 
   for (const r of races) {
-    const key = locationKey(r.location);
-    const coords = geocodeLocation(r.location);
-    if (!key || !coords) {
+    // 구체적 장소(venue)를 먼저, 없으면 광역 지역(location)으로 폴백.
+    const resolved = resolveLocation(r.venue, r.location);
+    if (!resolved) {
       unresolved.push(r);
       continue;
     }
+    const { key, latLng } = resolved;
     const existing = byKey.get(key);
     if (existing) {
       existing.races.push(r);
     } else {
-      byKey.set(key, { key, latLng: coords, races: [r] });
+      byKey.set(key, { key, latLng, races: [r] });
     }
   }
 

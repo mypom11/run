@@ -39,8 +39,10 @@ export async function GET(req: NextRequest) {
       title: c.title ?? c.name ?? c.compName ?? "",
       startDate: c.startDateTime ?? c.startDate ?? null,
       endDate: c.endDateTime ?? c.endDate ?? null,
-      // runable API 실제 지역 필드는 cityCode (location은 대부분 null).
+      // runable API 실제 지역 필드는 cityCode (광역). display label로 쓴다.
       location: c.cityCode || c.location || c.region || c.address || null,
+      // c.location은 구체적 장소명("고양종합운동장"). 지도 정밀 좌표 매칭용.
+      venue: c.location || c.address || null,
       events: extractEvents(c),
       thumbnail: c.thumbnail ?? c.imageUrl ?? c.posterUrl ?? null,
       // runable API 실제 필드는 siteUrl (빈 문자열일 수 있어 || 로 건너뛴다).

@@ -26,9 +26,11 @@
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* 마커 */
+/* 마커
+ * position을 덮어쓰지 않는다. Leaflet은 마커를 .leaflet-marker-icon에
+ * position:absolute + transform으로 배치하므로, 여기서 relative로 바꾸면
+ * 마커가 절대 위치를 잃고 문서 흐름대로 쌓여(대각선으로) 어긋난다. */
 .race-marker {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;

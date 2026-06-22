@@ -42,7 +42,8 @@ export interface NormalizedRace {
   title: string;
   startDate: string | null;
   endDate: string | null;
-  location: string | null;
+  location: string | null; // display용 광역 지역 (cityCode). 예: "경기도"
+  venue: string | null; // 구체적 장소 (지도 정밀 좌표용). 예: "고양종합운동장"
   events: string[];
   thumbnail: string | null;
   officialUrl: string | null;

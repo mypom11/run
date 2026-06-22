@@ -8,7 +8,28 @@
 export type LatLng = [number, number];
 
 const RAW: Record<string, LatLng> = {
-  // 광역시·도 중심
+  // 광역시·도 정식 명칭 (runable cityCode가 주는 형태: "경상남도", "충청북도" 등).
+  // 축약형("경남")은 정식명의 부분 문자열이 아니므로 정식명을 키로 직접 둔다.
+  서울특별시: [37.5665, 126.978],
+  부산광역시: [35.1796, 129.0756],
+  대구광역시: [35.8714, 128.6014],
+  인천광역시: [37.4563, 126.7052],
+  광주광역시: [35.1595, 126.8526],
+  대전광역시: [36.3504, 127.3845],
+  울산광역시: [35.5384, 129.3114],
+  세종특별자치시: [36.4801, 127.289],
+  경기도: [37.4138, 127.5183],
+  강원특별자치도: [37.8228, 128.1555],
+  충청북도: [36.6357, 127.4914],
+  충청남도: [36.5184, 126.8],
+  전북특별자치도: [35.7175, 127.153],
+  전라북도: [35.7175, 127.153],
+  전라남도: [34.8161, 126.463],
+  경상북도: [36.576, 128.5056],
+  경상남도: [35.2598, 128.6647],
+  제주특별자치도: [33.4996, 126.5312],
+
+  // 광역시·도 축약형 (display label이나 짧은 문자열 폴백용)
   서울: [37.5665, 126.978],
   부산: [35.1796, 129.0756],
   대구: [35.8714, 128.6014],
@@ -93,20 +114,34 @@ const RAW: Record<string, LatLng> = {
 // 구체적인 키워드부터 매치되도록 정렬 (긴 키워드 우선)
 const KEYS_BY_LENGTH = Object.keys(RAW).sort((a, b) => b.length - a.length);
 
-export function geocodeLocation(text: string | null): LatLng | null {
-  if (!text) return null;
-  for (const key of KEYS_BY_LENGTH) {
-    if (text.includes(key)) return RAW[key];
+export interface ResolvedLocation {
+  key: string;
+  latLng: LatLng;
+}
+
+/**
+ * 여러 후보 문자열을 구체적인 것부터 차례로 매칭한다.
+ * 예: 구체적인 venue("고양종합운동장") → 광역 cityCode("경기도") 순.
+ * 첫 매칭이 좌표·키를 동시에 결정하므로 둘이 어긋나지 않는다.
+ */
+export function resolveLocation(
+  ...candidates: (string | null | undefined)[]
+): ResolvedLocation | null {
+  for (const text of candidates) {
+    if (!text) continue;
+    for (const key of KEYS_BY_LENGTH) {
+      if (text.includes(key)) return { key, latLng: RAW[key] };
+    }
   }
   return null;
 }
 
+export function geocodeLocation(text: string | null): LatLng | null {
+  return resolveLocation(text)?.latLng ?? null;
+}
+
 export function locationKey(text: string | null): string | null {
-  if (!text) return null;
-  for (const key of KEYS_BY_LENGTH) {
-    if (text.includes(key)) return key;
-  }
-  return null;
+  return resolveLocation(text)?.key ?? null;
 }
 
 // 한국 전체를 보기 위한 기본 중심/줌
