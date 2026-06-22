@@ -51,8 +51,8 @@
   color: #fff;
   background: var(--accent);
   box-shadow:
-    0 0 0 2px rgba(255, 90, 31, 0.25),
-    0 8px 24px -6px rgba(255, 90, 31, 0.55);
+    0 0 0 2px rgba(36, 121, 255, 0.25),
+    0 8px 24px -6px rgba(36, 121, 255, 0.55);
   white-space: nowrap;
 }
 
@@ -128,7 +128,7 @@
   padding: 2px 8px;
   border-radius: 999px;
   color: var(--accent-strong);
-  background: rgba(255, 90, 31, 0.12);
+  background: rgba(36, 121, 255, 0.12);
 }
 .race-popup__list {
   display: flex;

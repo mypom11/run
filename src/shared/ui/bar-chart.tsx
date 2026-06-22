@@ -37,7 +37,7 @@ export function BarChart({ labels, values, height = 160, ariaLabel }: BarChartPr
         datasets: [
           {
             data: values,
-            backgroundColor: "rgba(255, 90, 31, 0.85)",
+            backgroundColor: "rgba(36, 121, 255, 0.85)",
             borderRadius: 8,
             borderSkipped: false,
             barPercentage: 0.7,
