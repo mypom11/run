@@ -4,6 +4,8 @@
  */
 export const RUNABLE_API_BASE = "https://runable.me/next-api/index/v1";
 export const RUNABLE_STORAGE_BASE = "https://storage.runable.me";
+// 대회 상세 페이지는 아직 자체 라우트가 없고 runable.me가 호스팅한다.
+export const RUNABLE_SITE_BASE = "https://runable.me";
 
 export const NAV_ITEMS = [
   { href: "/", label: "홈" },

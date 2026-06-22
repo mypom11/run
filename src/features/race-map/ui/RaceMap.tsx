@@ -96,7 +96,7 @@ export function RaceMap({ races, height = 560 }: RaceMapProps) {
               )}</span>`
             : "";
           const href = r.compUrl ?? "#";
-          return `<a class="race-popup__item" href="${escapeHtml(href)}">
+          return `<a class="race-popup__item" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">
             <span class="race-popup__title">${escapeHtml(r.title)}</span>
             ${date}${events}
           </a>`;

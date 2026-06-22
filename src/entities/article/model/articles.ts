@@ -1,7 +1,7 @@
 import type { Article } from "./types";
 
-const img = (seed: string, w = 1200, h = 800) =>
-  `https://picsum.photos/seed/${seed}/${w}/${h}`;
+// 로컬 정적 자산(public/images). 외부 플레이스홀더 호스트 장애와 무관.
+const img = (seed: string) => `/images/${seed}.jpg`;
 
 export const ARTICLES: Article[] = [
   {

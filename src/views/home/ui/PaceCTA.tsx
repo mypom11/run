@@ -32,12 +32,11 @@ export function PaceCTA() {
           </div>
           <div className="relative aspect-[16/10] lg:aspect-auto">
             <Image
-              src="https://picsum.photos/seed/runable-pace-2/1200/900"
+              src="/images/runable-pace-2.jpg"
               alt=""
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"
-              unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[var(--bg-base)]/40" />
           </div>

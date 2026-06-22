@@ -19,6 +19,7 @@ export type RawRace = Record<string, unknown> & {
   thumbnail?: string;
   imageUrl?: string;
   posterUrl?: string;
+  siteUrl?: string; // runable.me 실제 필드명 (공식 홈페이지)
   officialUrl?: string;
   homepage?: string;
   events?: unknown;

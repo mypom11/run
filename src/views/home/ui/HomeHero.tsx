@@ -9,13 +9,12 @@ export function HomeHero() {
       {/* background image — HomeView가 패딩 없는 컨테이너라 viewport 풀블리드 */}
       <div className="relative h-[78vh] min-h-[560px] w-full">
         <Image
-          src="https://picsum.photos/seed/runable-hero-2/2000/1200"
+          src="/images/runable-hero-2.jpg"
           alt=""
           fill
           priority
           sizes="100vw"
           className="object-cover"
-          unoptimized
         />
         {/* gradient veil */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[var(--bg-base)]" />

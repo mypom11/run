@@ -8,6 +8,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { runableGet } from "@/shared/api/http";
+import { RUNABLE_SITE_BASE } from "@/shared/config/runable";
 import type { RaceListResponse, NormalizedRace } from "@/entities/race/model/types";
 
 export const revalidate = 60;
@@ -41,8 +42,10 @@ export async function GET(req: NextRequest) {
       location: c.location ?? c.region ?? c.address ?? null,
       events: extractEvents(c),
       thumbnail: c.thumbnail ?? c.imageUrl ?? c.posterUrl ?? null,
-      officialUrl: c.officialUrl ?? c.homepage ?? null,
-      compUrl: c.id ? `/comp/${c.id}` : null,
+      // runable API 실제 필드는 siteUrl (빈 문자열일 수 있어 || 로 건너뛴다).
+      officialUrl: c.siteUrl || c.officialUrl || c.homepage || null,
+      // 자체 /comp 라우트가 없으므로 runable.me 절대 URL로 — 상대 경로면 Next가 없는 라우트를 prefetch하다 404.
+      compUrl: c.id ? `${RUNABLE_SITE_BASE}/comp/${c.id}` : null,
       raw: c,
     }));
 

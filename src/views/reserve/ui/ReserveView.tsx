@@ -28,7 +28,7 @@ const RACE = {
   date: "2026.10.18 (일) 07:30",
   location: "여의도 한강공원",
   participants: "12,000명",
-  cover: "https://picsum.photos/seed/runable-reserve-hero/1800/900",
+  cover: "/images/runable-reserve-hero.jpg",
 };
 
 const OPTIONS: Option[] = [

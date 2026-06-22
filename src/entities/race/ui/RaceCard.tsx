@@ -48,8 +48,14 @@ export function RaceCard({ race }: RaceCardProps) {
     </Pressable>
   );
 
+  // compUrl은 runable.me 외부 상세 페이지 — 새 탭으로 열고 prefetch는 일어나지 않는다.
   return race.compUrl ? (
-    <Link href={race.compUrl} className="block focus-visible:outline-none">
+    <Link
+      href={race.compUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block focus-visible:outline-none"
+    >
       {inner}
     </Link>
   ) : (
