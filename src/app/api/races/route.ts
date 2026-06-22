@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runableGet } from "@/shared/api/http";
 import { RUNABLE_SITE_BASE } from "@/shared/config/runable";
-import type { RaceListResponse, NormalizedRace } from "@/entities/race/model/types";
+import type { RaceListResponse, NormalizedRace, RawRace } from "@/entities/race/model/types";
 
 export const revalidate = 60;
 
@@ -39,7 +39,8 @@ export async function GET(req: NextRequest) {
       title: c.title ?? c.name ?? c.compName ?? "",
       startDate: c.startDateTime ?? c.startDate ?? null,
       endDate: c.endDateTime ?? c.endDate ?? null,
-      location: c.location ?? c.region ?? c.address ?? null,
+      // runable API 실제 지역 필드는 cityCode (location은 대부분 null).
+      location: c.cityCode || c.location || c.region || c.address || null,
       events: extractEvents(c),
       thumbnail: c.thumbnail ?? c.imageUrl ?? c.posterUrl ?? null,
       // runable API 실제 필드는 siteUrl (빈 문자열일 수 있어 || 로 건너뛴다).
@@ -68,14 +69,19 @@ export async function GET(req: NextRequest) {
   }
 }
 
-function extractEvents(c: Record<string, unknown>): string[] {
-  const e = c.events ?? c.eventList ?? c.eventNames;
-  if (Array.isArray(e)) {
-    return e
-      .map((x) => (typeof x === "string" ? x : (x as { name?: string }).name))
-      .filter((x): x is string => Boolean(x));
-  }
-  return [];
+function extractEvents(c: RawRace): string[] {
+  // runable API 실제 필드는 compEvents: [{ eventName, distance }]. 나머지는 방어적 폴백.
+  const list = c.compEvents ?? c.events ?? c.eventList ?? c.eventNames;
+  if (!Array.isArray(list)) return [];
+  const names = list
+    .map((x) =>
+      typeof x === "string"
+        ? x
+        : ((x as { eventName?: string; name?: string }).eventName ??
+          (x as { name?: string }).name),
+    )
+    .filter((x): x is string => Boolean(x));
+  return Array.from(new Set(names)); // 같은 종목 중복 제거
 }
 
 function defaultFromIso() {

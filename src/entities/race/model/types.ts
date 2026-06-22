@@ -13,6 +13,7 @@ export type RawRace = Record<string, unknown> & {
   startDate?: string;
   endDateTime?: string;
   endDate?: string;
+  cityCode?: string; // runable.me 실제 필드명 (지역). location은 보통 null.
   location?: string;
   region?: string;
   address?: string;
@@ -22,6 +23,7 @@ export type RawRace = Record<string, unknown> & {
   siteUrl?: string; // runable.me 실제 필드명 (공식 홈페이지)
   officialUrl?: string;
   homepage?: string;
+  compEvents?: unknown; // runable.me 실제 필드명: [{ eventName, distance }]
   events?: unknown;
   eventList?: unknown;
   eventNames?: unknown;
